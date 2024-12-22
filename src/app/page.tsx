@@ -5,6 +5,7 @@ import TargetAudience from "@/components/TargetAudience";
 import Plans from "@/components/Plans";
 import Banner from "@/components/Banner";
 import Advantages from "@/components/Advantages";
+import BannerInterlan from "@/components/BannerInterlan";
 import BannerCableGO from "@/components/BannerCableGO";
 import Testimonial from "@/components/Testimonial";
 import RedesSociales from "@/components/RedesSociales";
@@ -20,6 +21,7 @@ export default function Page() {
       <Plans />
       <Banner />
       <Advantages />
+      <BannerInterlan />
       <BannerCableGO />
       <Testimonial />
       <RedesSociales />

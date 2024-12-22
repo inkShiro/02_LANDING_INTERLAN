@@ -1,52 +1,47 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 interface Testimonial {
   name: string;
   role: string;
   text: string;
-  image: string;
   date: string;
-  rating: number; // Calificación de estrellas
+  rating: number;
 }
 
 const testimonios: Testimonial[] = [
   {
-    name: 'Juan Pérez',
-    role: 'Estudiante de Matemáticas',
-    text: '¡Esta plataforma ha cambiado mi forma de aprender! Los ejercicios son dinámicos y me ayudan a reforzar los conceptos que más me cuestan.',
-    image: '/images/juan.jpg',
+    name: 'María Gómez',
+    role: 'Gerente de TI',
+    text: 'La conexión a internet de esta empresa ha sido fundamental para mejorar la productividad de nuestra oficina. Es rápida y confiable, ideal para el trabajo remoto.',
     date: '12 de diciembre de 2024',
     rating: 5,
   },
   {
-    name: 'Ana García',
-    role: 'Profesora de Física',
-    text: 'Los recursos interactivos de esta plataforma me han permitido mejorar la comprensión de mis estudiantes. La flexibilidad y personalización son clave.',
-    image: '/images/ana.jpg',
+    name: 'Carlos Ramírez',
+    role: 'Propietario de restaurante',
+    text: 'El servicio de internet que ofrecen ha sido un cambio total para mi negocio. La velocidad y estabilidad nos permiten manejar pedidos y pagos de forma eficiente.',
     date: '11 de diciembre de 2024',
     rating: 4,
   },
   {
-    name: 'Carlos Méndez',
-    role: 'Empresario',
-    text: 'Utilizo esta plataforma para capacitar a mis empleados. Es fácil de usar y ofrece un enfoque práctico que se adapta a sus necesidades.',
-    image: '/images/carlos.jpg',
+    name: 'Sofía Martínez',
+    role: 'Freelancer',
+    text: 'Como trabajadora independiente, necesito una conexión constante y sin interrupciones. Esta empresa me ha brindado el mejor servicio de internet que he probado hasta ahora.',
     date: '10 de diciembre de 2024',
-    rating: 4,
-  },
-  {
-    name: 'Laura Sánchez',
-    role: 'Estudiante de Psicología',
-    text: 'Excelente plataforma. Me ha permitido mejorar mi rendimiento académico de manera significativa.',
-    image: '/images/laura.jpg',
-    date: '9 de diciembre de 2024',
     rating: 5,
   },
   {
-    name: 'José López',
-    role: 'Profesor de Historia',
-    text: 'Las herramientas son increíbles, especialmente los ejercicios interactivos. Me han ayudado a explicar conceptos de forma más clara.',
-    image: '/images/jose.jpg',
+    name: 'Pedro Fernández',
+    role: 'Director de Marketing',
+    text: 'La conexión de alta velocidad ha mejorado nuestra capacidad para realizar videollamadas y transferir grandes archivos sin problemas. Recomendado al 100%.',
+    date: '9 de diciembre de 2024',
+    rating: 4,
+  },
+  {
+    name: 'Laura Díaz',
+    role: 'Cliente residencial',
+    text: 'Desde que cambiamos a este proveedor de internet, la velocidad y la estabilidad son excepcionales. Ya no tengo problemas con la señal en ninguna parte de mi casa.',
     date: '8 de diciembre de 2024',
     rating: 5,
   },
@@ -54,55 +49,67 @@ const testimonios: Testimonial[] = [
 
 const Testimonios: FC = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const itemsToShow = isMobile ? 1 : 3;
 
   const nextTestimonial = () => {
-    setCurrentTestimonial((prevIndex) => (prevIndex + 3) % testimonios.length); // Cambiado a 3
+    setCurrentTestimonial((prevIndex) => (prevIndex + itemsToShow) % testimonios.length);
   };
 
   const prevTestimonial = () => {
     setCurrentTestimonial((prevIndex) =>
-      prevIndex === 0 ? testimonios.length - 3 : prevIndex - 3 // Cambiado a 3
+      prevIndex === 0 ? testimonios.length - itemsToShow : prevIndex - itemsToShow
     );
   };
 
-  const visibleTestimonials = testimonios.slice(currentTestimonial, currentTestimonial + 3); // Obtener 3 testimonios
+  const visibleTestimonials = testimonios.slice(
+    currentTestimonial,
+    currentTestimonial + itemsToShow
+  );
 
   return (
     <section className="bg-gray-50 py-12 px-4">
       <div className="max-w-7xl mx-auto text-center">
-        {/* Botones de navegación */}
-        <div className="flex justify-center mb-8">
-          <button
-            onClick={prevTestimonial}
-            className="bg-gray-800 text-white p-2 rounded-full mr-4 hover:bg-gray-700 transition"
-          >
-            &lt;
-          </button>
-
-          <h2 className="text-3xl font-bold mb-8 text-gray-800">TESTIMONIOS</h2>
-
-          <button
-            onClick={nextTestimonial}
-            className="bg-gray-800 text-white p-2 rounded-full ml-4 hover:bg-gray-700 transition"
-          >
-            &gt;
-          </button>
+        <div className="flex justify-center items-center space-x-4">
+          <div>
+            <button
+              onClick={prevTestimonial}
+              className="bg-gray-800 text-white p-3 rounded-full hover:bg-gray-700 transition"
+            >
+              <FiChevronLeft size={24} />
+            </button>
+          </div>
+          <span className="text-3xl font-bold text-gray-800 align-middle">TESTIMONIOS</span>
+          <div>
+            <button
+              onClick={nextTestimonial}
+              className="bg-gray-800 text-white p-3 rounded-full hover:bg-gray-700 transition"
+            >
+              <FiChevronRight size={24} />
+            </button>
+          </div>
         </div>
-
-        {/* Carrusel de testimonios */}
-        <div className="flex space-x-4 justify-center">
+        <div
+          className={`flex ${isMobile ? 'flex-col items-center' : 'flex-row space-x-8'
+            } justify-center mt-12`}
+        >
           {visibleTestimonials.map((testimonial, index) => (
-            <div key={index} className="bg-white shadow-lg rounded-lg p-6 w-80 flex flex-col items-center text-center">
-              {/* <img
-                src={testimonial.image}
-                alt={testimonial.name}
-                className="w-24 h-24 rounded-full mb-4 object-cover"
-              /> */}
-              <h3 className="text-xl font-semibold mb-2">{testimonial.name}</h3>
+            <div
+              key={index}
+              className="bg-[#F2F0F0] shadow-lg rounded-lg p-6 w-80 flex flex-col items-center text-center"
+            >
+              <h3 className="text-xl text-black font-semibold mb-2">{testimonial.name}</h3>
               <p className="text-sm text-gray-500 mb-4">{testimonial.role}</p>
               <p className="text-sm text-gray-400 mb-2">{testimonial.date}</p>
-
-              {/* Ranking de estrellas */}
               <div className="flex mb-4">
                 {Array.from({ length: 5 }, (_, index) => (
                   <svg
@@ -121,9 +128,7 @@ const Testimonios: FC = () => {
                   </svg>
                 ))}
               </div>
-
               <p className="text-gray-700 italic">&quot;{testimonial.text}&quot;</p>
-
             </div>
           ))}
         </div>
