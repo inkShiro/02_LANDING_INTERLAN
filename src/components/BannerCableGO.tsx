@@ -112,7 +112,7 @@ const BannerCableGO = () => {
             } transform m-2 flex flex-col justify-center`}
         >
           <div
-            className={`absolute  ${isMobile
+            className={`${isMobile
               ? 'bottom-[-10%] left-[0%] h-[60vh] w-[80vw] flex flex-col'
               : 'bottom-[-4%] left-[0vw] h-[40vh] w-[40vw] -translate-y-1/2'
               } transform  m-2 flex flex-col justify-center`}
